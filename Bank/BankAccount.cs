@@ -9,6 +9,9 @@ namespace BankAccountNS
     {
         private readonly string m_customerName;
         private double m_balance;
+        public const string DebitAmountExceedsBalanceMessage = "Debit amount exceeds balance";
+        public const string DebitAmountLessThanZeroMessage = "Debit amount is less than zero";
+        public const string CreditAmountLessThanZeroMessage = "Credit amount is less than zero";
 
         private BankAccount() { }
 
@@ -28,26 +31,27 @@ namespace BankAccountNS
             get { return m_balance; }
         }
 
-        public void Debit(double amount)
+        public void Debit(double amount) // снятие со счета
         {
             if (amount > m_balance)
             {
-                throw new ArgumentOutOfRangeException("amount");
+                throw new System.ArgumentOutOfRangeException("amount", amount, DebitAmountExceedsBalanceMessage);
             }
 
             if (amount < 0)
             {
-                throw new ArgumentOutOfRangeException("amount");
+                throw new System.ArgumentOutOfRangeException("amount", amount, DebitAmountLessThanZeroMessage);
             }
 
-            m_balance += amount;
+            m_balance -= amount;
         }
 
-        public void Credit(double amount)
+        public void Credit(double amount) // пополнение на счет
         {
             if (amount < 0)
             {
-                throw new ArgumentOutOfRangeException("amount");
+                throw new System.ArgumentOutOfRangeException("amount", amount, CreditAmountLessThanZeroMessage);
+                //throw new ArgumentOutOfRangeException("amount");
             }
 
             m_balance += amount;
@@ -61,6 +65,8 @@ namespace BankAccountNS
             ba.Debit(11.22);
             Console.WriteLine("Current balance is ${0}", ba.Balance);
             Console.ReadLine();
+
+
         }
     }
 }
